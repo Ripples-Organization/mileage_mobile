@@ -26,6 +26,8 @@ import Register from "./screens/Register/Register";
 import ForgotPassword from "./screens/ForgotPassword/ForgotPassword";
 import ResetPassword from "./screens/ResetPassword/ResetPassword";
 import FailedReset from "./screens/FailedReset/FailedReset";
+import CreateCar from "./screens/CreateCar/CreateCar";
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -81,7 +83,12 @@ export default function App() {
             name="ResetPassword1"
             component={FailedReset}
             options={{ headerShown: false }}
-          ></Stack.Screen>
+          />
+          <Stack.Screen
+            name="CreateCar"
+            component={CreateCar}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
