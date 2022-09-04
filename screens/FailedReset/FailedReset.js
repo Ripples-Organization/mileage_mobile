@@ -154,25 +154,7 @@ import {
       marginRight: 24,
       marginBottom: 24,
     },
-    input1: {
-      height: 50,
-      width: 350,
-      borderWidth: 1,
-      borderColor: "#EEEEEE",
-      backgroundColor: "#FFFFFF",
-      padding: 10,
-      borderTopRightRadius: 5,
-      borderTopLeftRadius: 5,
-    },
-    input2: {
-      height: 50,
-      width: 350,
-      borderWidth: 1,
-      borderColor: "#EEEEEE",
-      backgroundColor: "#FFFFFF",
-      padding: 10,
-      borderBottomRightRadius: 5,
-      borderBottomLeftRadius: 5,
-    },
+
+
   });
   
