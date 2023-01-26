@@ -54,6 +54,7 @@ const CreateCar = ({ navigation }) => {
               alignItems: "flex-end",
               justifyContent: "center",
             }}
+            
           >
             <TouchableOpacity onPress={() => setUserModal(!showUserModal)}>
               <Image
@@ -182,7 +183,7 @@ const CreateCar = ({ navigation }) => {
   const userModal = () => {
     return (
       <View>
-        <Modal animationType="slide" transparent={true} visible={showUserModal}>
+        <Modal animationType="slide" transparent={true} visible={showUserModal} >
           <View
             style={{
               width: 250,
@@ -220,9 +221,6 @@ const CreateCar = ({ navigation }) => {
           </View>
         </Modal>
 
-        {/* <TouchableOpacity onPress={() => setUserModal(true)}>
-          <Text>Open Modal</Text>
-        </TouchableOpacity> */}
       </View>
     );
   };
@@ -247,7 +245,7 @@ const CreateCar = ({ navigation }) => {
         >
           <SafeAreaView>
             <View>
-              <Text>BMW</Text>
+              
             </View>
             <View>
               <View
