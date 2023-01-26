@@ -168,7 +168,7 @@ const Login = ({ navigation }) => {
                   marginTop: "5%",
                 }}
               >
-                <TouchableOpacity onPress={() => handleLogin()}>
+                <TouchableOpacity onPress={handleLogin}>
                   <Text
                     style={{
                       textAlign: "center",
