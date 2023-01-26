@@ -221,9 +221,6 @@ const CreateCar = ({ navigation }) => {
           </View>
         </Modal>
 
-        {/* <TouchableOpacity onPress={() => setUserModal(true)}>
-          <Text>Open Modal</Text>
-        </TouchableOpacity> */}
       </View>
     );
   };
