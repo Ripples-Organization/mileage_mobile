@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontFamily: 'IBMPlexMono_300Light_Italic',
     fontSize:20,
-    textAlign:'right',
+    textAlign:'center',
     marginTop:10
   },
   title: {

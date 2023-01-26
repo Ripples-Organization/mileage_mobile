@@ -12,6 +12,14 @@ import React from "react";
 import { COLORS, images, icons } from "../../constants";
 
 const Register = ({ navigation }) => {
+  const globalState = useContext(CounterContext);
+  const { state, dispatch } = globalState;
+
+  const { handleAction, loading: pending, error } = useReduxApi();
+  const handleForm = (name, text) => {
+    setValue({ ...value, [name]: text });
+  };
+
   function renderHeader() {
     return (
       <View
@@ -77,6 +85,10 @@ const Register = ({ navigation }) => {
       </View>
     );
   }
+
+
+
+
 
   return (
     <View style={styles.container}>

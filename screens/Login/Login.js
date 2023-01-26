@@ -8,8 +8,19 @@ import {
   TextInput,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import * as SecureStore from "expo-secure-store";
 import { COLORS, images, icons } from "../../constants";
+import FormField from "../../components/FormField/FormField";
+import { useReduxApi } from "../../utils/hooks";
+import { useToast } from "react-native-toast-notifications";
+import { loginUser } from "../../storeRedux/features/auth/authSlice";
+
+import {
+  isEmailValid,
+  isPasswordValidField,
+  isEmpty,
+} from "../../utils/validators";
 
 const Login = ({ navigation }) => {
   function renderHeader() {
@@ -73,7 +84,40 @@ const Login = ({ navigation }) => {
       </View>
     );
   }
+  const [value, setValue] = useState({ email: "", password: "" });
 
+  const { handleAction, loading: pending, error } = useReduxApi();
+  useEffect(() => {
+    (async () => {
+      let email = await SecureStore.getItemAsync("email");
+      let password = await SecureStore.getItemAsync("password");
+      setValue({ ...value, email, password });
+    })();
+  }, []);
+
+  const handleForm = (name, text) => {
+    setValue({ ...value, [name]: text });
+  };
+  const handleLogin = async () => {
+    //validate the form fields
+
+    const res = await handleAction(loginUser, {
+      ...value,
+      type: "email_login",
+    });
+
+    console.log(res,'detail')
+    if (res.success === true) {
+      navigation.navigate("CreateCar");
+      await SecureStore.setItemAsync("email", value.email);
+      await SecureStore.setItemAsync("password", value.password);
+      console.log("login successful", {
+        type: "success",
+      });
+    } else {
+      navigation.navigate("OnBoarding");
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={[{ flex: 1 }, styles.elementsContainer]}>
@@ -97,31 +141,34 @@ const Login = ({ navigation }) => {
             >
               Enter your login information:
             </Text>
-            <TextInput
-              style={styles.input1}
-              onChangeText=""
-              placeholder="Phone or email"
+            <FormField
+              marginVertical={10}
+              placeholder="mail@gmail.com"
+              secure={false}
+              value={value.email}
+              handleForm={handleForm}
+              name="email"
             />
-            <TextInput
-              style={styles.input2}
-              onChangeText=""
-              placeholder="Password"
-              keyboardType="numeric"
+            <FormField
+              marginVertical={10}
+              placeholder="password"
+              secure={true}
+              value={value.password}
+              handleForm={handleForm}
+              name="password"
             />
 
             <View>
               <View
                 style={{
                   width: 350,
-                  backgroundColor: COLORS.lightblue,
+                  backgroundColor: COLORS.white,
                   padding: "4%",
                   borderRadius: 4,
                   marginTop: "5%",
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("CreateCar")}
-                >
+                <TouchableOpacity onPress={() => handleLogin()}>
                   <Text
                     style={{
                       textAlign: "center",

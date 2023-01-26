@@ -27,6 +27,9 @@ import ForgotPassword from "./screens/ForgotPassword/ForgotPassword";
 import ResetPassword from "./screens/ResetPassword/ResetPassword";
 import FailedReset from "./screens/FailedReset/FailedReset";
 import CreateCar from "./screens/CreateCar/CreateCar";
+import { CounterContextProvider } from "./store";
+import { Provider } from "react-redux";
+import store from "./storeRedux/index";
 
 const Stack = createStackNavigator();
 
@@ -52,45 +55,49 @@ export default function App() {
     return <AppLoading />;
   } else {
     return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="OnBoarding"
-            component={OnBoarding}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Register"
-            component={Register}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPassword}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ResetPassword"
-            component={ResetPassword}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ResetPassword1"
-            component={FailedReset}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="CreateCar"
-            component={CreateCar}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <CounterContextProvider>
+        <Provider store={store}>
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen
+                name="OnBoarding"
+                component={OnBoarding}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Register"
+                component={Register}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ForgotPassword"
+                component={ForgotPassword}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ResetPassword"
+                component={ResetPassword}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ResetPassword1"
+                component={FailedReset}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="CreateCar"
+                component={CreateCar}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </Provider>
+      </CounterContextProvider>
     );
   }
 }

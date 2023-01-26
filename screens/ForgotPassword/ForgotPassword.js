@@ -144,8 +144,7 @@ import {
       borderColor: '#EEEEEE',
       backgroundColor: '#FFFFFF',
       padding: 10,
-      borderTopRightRadius: 5,
-      borderTopLeftRadius: 5,
+      borderRadius:5
     },
     input2: {
       height: 50,

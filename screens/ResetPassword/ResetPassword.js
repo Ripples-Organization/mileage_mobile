@@ -129,7 +129,7 @@ const ResetPassword = ({ navigation }) => {
               placeholder="New password"
             />
             <TextInput
-              style={styles.input1}
+              style={styles.input2}
               onChangeText=""
               placeholder="Confirm new password"
             />
