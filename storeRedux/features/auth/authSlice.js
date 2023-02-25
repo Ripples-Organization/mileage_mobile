@@ -5,9 +5,6 @@ const initialState = {
   isAuthenticated: false,
   user: {},
   error: null,
-  profile: {},
-  completeUserProfile: {},
-  couponCategories: [],
   cars: [],
   trips: [],
 };

@@ -10,13 +10,41 @@ import {
   Alert,
   Modal,
   Pressable,
+  Animated,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import { COLORS, images, icons } from "../../constants";
+import { getAllCars, logout } from "../../storeRedux/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useReduxApi } from "../../utils/hooks";
+import { StatusBar } from "expo-status-bar";
+
 
 const CreateCar = ({ navigation }) => {
+  const scrollY = useRef(new Animated.Value(0)).current;
+
   const [modalVisible, setModalVisible] = useState(false);
   const [showUserModal, setUserModal] = useState(false);
+
+  const { cars, user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    (async () => {
+      const res = await handleAction(getAllCars);
+      console.log(res,'cars')
+    })();
+  }, []);
+
+  const loggedIn = user.hasOwnProperty("email");
+  const { handleAction, loading: pending, error } = useReduxApi();
+
+  const dispatch = useDispatch();
+
+  const logoutUser = () => {
+    console.log("logout");
+    navigation.navigate("OnBoarding");
+    dispatch(logout());
+  };
 
   function renderHeader() {
     return (
@@ -54,7 +82,6 @@ const CreateCar = ({ navigation }) => {
               alignItems: "flex-end",
               justifyContent: "center",
             }}
-            
           >
             <TouchableOpacity onPress={() => setUserModal(!showUserModal)}>
               <Image
@@ -182,49 +209,54 @@ const CreateCar = ({ navigation }) => {
 
   const userModal = () => {
     return (
-      <View>
-        <Modal animationType="slide" transparent={true} visible={showUserModal} >
-          <View
-            style={{
-              width: 250,
-              height: 100,
-              backgroundColor: COLORS.white,
-              position: "absolute",
-              left: "28%",
-              marginTop: "28%",
-              shadowColor: "black",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.8,
-              shadowRadius: 2,
-              elevation: 2,
-            }}
+      <>
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showUserModal}
           >
-            <View style={{ marginTop: "5%" }}>
-              <View
-                style={{
-                  padding: 5,
-                  borderBottomWidth: 1,
-                  borderBottomColor: "black",
-                  borderBottomWidth: "solid",
-                }}
-              >
-                <Text>Export all cars to CSV</Text>
+            <View
+              style={{
+                width: 250,
+                height: 100,
+                backgroundColor: COLORS.white,
+                position: "absolute",
+                left: "28%",
+                marginTop: "28%",
+                shadowColor: "black",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.8,
+                shadowRadius: 2,
+                elevation: 2,
+              }}
+            >
+              <View style={{ marginTop: "5%" }}>
+                <View
+                  style={{
+                    padding: 5,
+                    borderBottomWidth: 1,
+                    borderBottomColor: "black",
+                    borderBottomWidth: "solid",
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => setUserModal(!showUserModal)}
+                  >
+                    <Text>x</Text>
+                  </TouchableOpacity>
+                  <Text>Export all cars to CSV</Text>
+                </View>
+
+                <Text style={{ padding: 5, marginTop: 2 }}>Account</Text>
+                <Text style={{ padding: 5 }} onPress={() => logoutUser()}>
+                  Log out
+                </Text>
               </View>
-
-              <Text style={{ padding: 5, marginTop: 2 }}>Account</Text>
-              <Text style={{ padding: 5 }}>Log out</Text>
             </View>
-
-            <TouchableOpacity onPress={() => setUserModal(!showUserModal)}>
-              <Text>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
-
-        {/* <TouchableOpacity onPress={() => setUserModal(true)}>
-          <Text>Open Modal</Text>
-        </TouchableOpacity> */}
-      </View>
+          </Modal>
+        </View>
+      </>
     );
   };
 
@@ -247,9 +279,44 @@ const CreateCar = ({ navigation }) => {
           }}
         >
           <SafeAreaView>
-            <View>
-              
-            </View>
+            {cars.length === 0 && !pending && (
+              <View>
+                <Text>No Cars</Text>
+              </View>
+            )}
+
+            {!pending && (
+              <Animated.FlatList
+                data={cars}
+                keyExtractor={cars._id}
+                showsVerticalScrollIndicator={false}
+                onScroll={Animated.event(
+                  [
+                    {
+                      nativeEvent: {
+                        contentOffset: {
+                          y: scrollY,
+                        },
+                      },
+                    },
+                  ],
+                  { useNativeDriver: false }
+                )}
+     
+                renderItem={({ item, index }) => {
+                  return (
+                    <>
+                      <View>
+                        <Text style={{ backgroundColor: "yellow" }}>
+                          {item?.car_name}
+                        </Text>
+                      </View>
+                    </>
+                  );
+                }}
+              />
+            )}
+
             <View>
               <View
                 style={{

@@ -8,10 +8,29 @@ import {
   TextInput,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { COLORS, images, icons } from "../../constants";
+import {
+  isEmailValid,
+  isPasswordValidField,
+  isEmpty,
+} from "../../utils/validators";
+import FormField from "../../components/FormField/FormField";
+import { useToast } from "react-native-toast-notifications";
+import { useContext } from "react";
+import { CounterContext } from "../../store";
+import { useReduxApi } from "../../utils/hooks";
+import { createAccount } from "../../storeRedux/features/auth/authSlice";
+
 
 const Register = ({ navigation }) => {
+  const toast = useToast();
+  const [value, setValue] = useState({
+    password: "",
+    phoneNumber: "",
+    email: "",
+  });
+
   const globalState = useContext(CounterContext);
   const { state, dispatch } = globalState;
 
@@ -20,6 +39,36 @@ const Register = ({ navigation }) => {
     setValue({ ...value, [name]: text });
   };
 
+  const handleSignUp = async () => {
+    if (isEmpty(value.email)) {
+      toast.show("email field cannot be empty", { type: "danger" });
+    } else if (!isEmailValid(value.email)) {
+      console.log("please enter a valid email address", { type: "danger" });
+    } else if (isEmpty(value.phoneNumber)) {
+      console.log("please enter a valid phone number", { type: "danger" });
+    } else if (isEmpty(value.password)) {
+      console.log("please enter password", { type: "danger" });
+    } else if (!isPasswordValidField(value.password)) {
+      console.log("password must be minimum of 7 characters", {
+        type: "danger",
+      });
+    } else {
+      const res = await handleAction(createAccount, {
+        ...value,
+      });
+      if (res.success === true) {
+        console.log("sign up successful", {
+          type: "success",
+        });
+         navigation.navigate("Login");
+      } else {
+        console.log(res?.error, {
+          type: "success",
+        });
+        navigation.navigate("Register");
+      }
+    }
+  };
   function renderHeader() {
     return (
       <View
@@ -86,10 +135,6 @@ const Register = ({ navigation }) => {
     );
   }
 
-
-
-
-
   return (
     <View style={styles.container}>
       <View style={[{ flex: 1 }, styles.elementsContainer]}>
@@ -109,27 +154,37 @@ const Register = ({ navigation }) => {
                 marginBottom: "4%",
                 color: "#FFFFFF",
                 fontFamily: "IBMPlexMono_700Bold",
-                fontSize:13
+                fontSize: 13,
               }}
             >
               Enter your new account information:
             </Text>
-            <TextInput
-              style={styles.input1}
-              onChangeText=""
-              placeholder="Email"
+
+            <FormField
+              marginVertical={10}
+              placeholder="mail@gmail.com"
+              secure={false}
+              value={value.email}
+              handleForm={handleForm}
+              name="email"
             />
-            <TextInput
-              style={styles.input2}
-              onChangeText=""
+
+            <FormField
+              marginVertical={10}
               placeholder="Phone"
+              secure={false}
+              value={value.phoneNumber}
+              handleForm={handleForm}
+              name="phoneNumber"
               keyboardType="numeric"
             />
-            <TextInput
-              style={styles.input3}
-              onChangeText=""
-              placeholder="Password"
-              keyboardType="numeric"
+            <FormField
+              marginVertical={10}
+              placeholder="password"
+              secure={true}
+              value={value.password}
+              handleForm={handleForm}
+              name="password"
             />
             <View>
               <View
@@ -141,7 +196,7 @@ const Register = ({ navigation }) => {
                   marginTop: "5%",
                 }}
               >
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleSignUp}>
                   <Text
                     style={{
                       textAlign: "center",
@@ -153,7 +208,7 @@ const Register = ({ navigation }) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-       
+
               <Text
                 style={{
                   textAlign: "center",

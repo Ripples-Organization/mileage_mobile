@@ -2,6 +2,7 @@ import Axios from "axios";
 import PropTypes from "prop-types";
 import { BASE_URL } from "./constants";
 
+
 const axiosCancelTokenSource = Axios.CancelToken.source();
 
 const apiService = (url, type = "GET", data, headers) => {
@@ -25,6 +26,8 @@ const apiService = (url, type = "GET", data, headers) => {
     }
     return "application/json";
   };
+
+  
 
   const header = {
     "Content-Type": headerContent(),
